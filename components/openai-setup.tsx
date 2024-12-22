@@ -1,4 +1,4 @@
-import { openAIKeyAtom } from "@/lib/atoms/openai"
+import { openAIKeyAtom, openAIHostAtom } from "@/lib/atoms/openai"
 import { useSetAtom } from "jotai"
 import React from "react"
 
@@ -10,12 +10,18 @@ interface OpenAISetupProps {}
 
 export default function OpenAISetup({}: OpenAISetupProps) {
   const setOpenAIKey = useSetAtom(openAIKeyAtom)
+  const setOpenAIHost = useSetAtom(openAIHostAtom)
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const hostInputRef = React.useRef<HTMLInputElement>(null)
 
   const onClick = () => {
     const input = inputRef.current
+    console.log('apikey input', input.value)
     if (!input) return
     setOpenAIKey(input.value)
+    console.log('host input', hostInputRef?.current.value)
+    if (!hostInputRef?.current.value) return
+    setOpenAIHost(hostInputRef.current.value)
   }
 
   return (
@@ -27,6 +33,13 @@ export default function OpenAISetup({}: OpenAISetupProps) {
           id="apiKey"
           type="password"
           placeholder="Enter your OpenAI API key"
+        />
+        <Label htmlFor="apiKey">HOST</Label>
+        <Input
+          ref={hostInputRef}
+          id="host"
+          type="text"
+          placeholder="https://api.openai.com/v1"
         />
         <div className="flex justify-center items-center w-full p-3 bg-white dark:bg-[#0f0f0f]">
           <Button variant="outline" className="w-full h-12" onClick={onClick}>

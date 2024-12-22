@@ -20,7 +20,7 @@ async function createChatCompletion(
   messages: ChatCompletionMessageParam[],
   context: any
 ) {
-  const llm = createLlm(context.openAIKey)
+  const llm = createLlm(context.openAIKey, context.openAIHost)
   console.log("Creating Chat Completion")
 
   const parsed = context.transcript.events

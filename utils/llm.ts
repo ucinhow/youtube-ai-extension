@@ -1,6 +1,7 @@
 import OpenAI from "openai"
 
-export const createLlm = (apiKey: string) =>
+export const createLlm = (apiKey: string, host?: string) =>
   new OpenAI({
-    apiKey
+    apiKey,
+    baseURL: host
   })

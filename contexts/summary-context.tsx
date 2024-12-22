@@ -1,4 +1,4 @@
-import { openAIKeyAtom } from "@/lib/atoms/openai"
+import { openAIHostAtom, openAIKeyAtom } from "@/lib/atoms/openai"
 import { models, prompts, type Model, type Prompt } from "@/lib/constants"
 import { useAtomValue } from "jotai"
 import * as React from "react"
@@ -38,6 +38,7 @@ interface SummaryProviderProps {
 export function SummaryProvider({ children }: SummaryProviderProps) {
   const port = usePort("completion")
   const openAIKey = useAtomValue(openAIKeyAtom)
+  const openAIHost = useAtomValue(openAIHostAtom)
 
   const [summaryModel, setSummaryModel] = React.useState<Model>(models[0])
   const [summaryPrompt, setSummaryPrompt] = React.useState<Prompt>(prompts[0])
@@ -62,7 +63,7 @@ export function SummaryProvider({ children }: SummaryProviderProps) {
     port.send({
       prompt: summaryPrompt.content,
       model: summaryModel.content,
-      context: { ...extensionData, openAIKey }
+      context: { ...extensionData, openAIKey, openAIHost }
     })
   }
 

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper"
 import { useChat } from "@/contexts/chat-context"
 import { useExtension } from "@/contexts/extension-context"
-import { openAIKeyAtom } from "@/lib/atoms/openai"
+import { openAIHostAtom, openAIKeyAtom } from "@/lib/atoms/openai"
 import { useEnterSubmit } from "@/lib/hooks/use-enter-submit"
 import { cn } from "@/lib/utils"
 import { PaperPlaneIcon } from "@radix-ui/react-icons"
@@ -25,6 +25,7 @@ export default function PromptForm({ className }: PromptFormProps) {
   const port = usePort("chat")
   const { extensionData } = useExtension()
   const openAIKey = useAtomValue(openAIKeyAtom)
+  const openAIHost = useAtomValue(openAIHostAtom)
 
   const {
     chatMessages,
@@ -57,7 +58,7 @@ export default function PromptForm({ className }: PromptFormProps) {
     port.send({
       model: model,
       messages: messages,
-      context: { ...extensionData, openAIKey }
+      context: { ...extensionData, openAIKey, openAIHost }
     })
   }
 

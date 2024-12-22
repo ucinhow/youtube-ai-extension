@@ -1,13 +1,16 @@
+import React from "react"
 import { Button } from "@/components/ui/button"
 import { CollapsibleTrigger } from "@/components/ui/collapsible"
 import { TooltipWrapper } from "@/components/ui/tooltip-wrapper"
 import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard"
 
 // prettier-ignore
-import { ActivityLogIcon, CaretSortIcon, ChatBubbleIcon, CheckIcon, Link2Icon, Pencil2Icon } from "@radix-ui/react-icons";
+import { ActivityLogIcon, CaretSortIcon, ChatBubbleIcon, CheckIcon, Link2Icon, Pencil2Icon, MixerHorizontalIcon } from "@radix-ui/react-icons";
 
 import { IconOpenAI } from "@/components/ui/icons"
 import { useExtension } from "@/contexts/extension-context"
+import { useSetAtom } from "jotai"
+import { openAIHostAtom, openAIKeyAtom } from "@/lib/atoms/openai"
 
 interface ExtensionActionsProps {}
 
@@ -16,10 +19,17 @@ export default function ExtensionActions({}: ExtensionActionsProps) {
     useExtension()
 
   const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 })
+  const setOpenAIKey = useSetAtom(openAIKeyAtom)
+  const setOpenAIHost = useSetAtom(openAIHostAtom)
 
   function CopyVideoURL() {
     if (isCopied) return
     copyToClipboard(window.location.href)
+  }
+
+  function ResetOpenAI() {
+    setOpenAIKey(null)
+    setOpenAIHost('https://api.openai.com/v1')
   }
 
   return (
@@ -61,6 +71,12 @@ export default function ExtensionActions({}: ExtensionActionsProps) {
       </div>
 
       <div className="flex items-center space-x-2">
+        <TooltipWrapper text="Reset OpenAI">
+          <Button variant="outline" size="icon" onClick={() => ResetOpenAI()}>
+              <MixerHorizontalIcon className="h-4.5 w-4.5 opacity-60" />
+          </Button>
+        </TooltipWrapper>
+
         <TooltipWrapper text="Copy Video URL">
           <Button variant="outline" size="icon" onClick={() => CopyVideoURL()}>
             {isCopied ? (
